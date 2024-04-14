@@ -1,0 +1,29 @@
+[
+    {
+        "id": 1,
+        "title": "AZUCAR BELLA VISTA X 1 KG.",
+        "description": "Azucar marca Bella Vista x 1 Kg",
+        "price": 899,
+        "thumbnail": "https://statics.dinoonline.com.ar/imagenes/large_460x460/2000027_l.jpg",
+        "code": "2000027",
+        "stock": 800
+    },
+    {
+        "id": 2,
+        "title": "YERBA VERDEFLOR COMPUESTA X 1 KG.",
+        "description": "Yerba marca Verdeflor tipo Compuesta x 1 KG.",
+        "price": 2098,
+        "thumbnail": "https://statics.dinoonline.com.ar/imagenes/large_460x460/2010294_l.jpg",
+        "code": "2010294",
+        "stock": 1200
+    },
+    {
+        "id": 3,
+        "title": "AGUA SABORIZADA LIVRA NARANJA BOTELLA X 1.500 CC.",
+        "description": "Agua saborizada marca Livra sabor naranja en botella de 1.5 cc",
+        "price": 990,
+        "thumbnail": "https://statics.dinoonline.com.ar/imagenes/large_460x460/3040735_l.jpg",
+        "code": "3040735",
+        "stock": 600
+    }
+]
