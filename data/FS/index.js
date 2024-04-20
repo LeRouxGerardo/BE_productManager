@@ -1,10 +1,9 @@
-const fs = require("fs");
-const { get } = require("http");
-const { json } = require("stream/consumers");
+import fs from "fs";
+
 
 
 let products = [];
-let pathFile= "./data/pruducts.json"
+let pathFile = "./data/fs/files/products.json";
 
 const addProduct = async (title, description, price, thumbnail, code, stock) => {
 
@@ -75,6 +74,9 @@ const deleteProduct = async (id) => {
     products = products.filter( product => product.id !== id);
     await fs.promises.writeFile(pathFile, JSON.stringify(products));
 }
+
+
+export { getProducts, getProductById, updateProduct, deleteProduct };
 
 /*  //Test
 addProduct("AZUCAR BELLA VISTA X 1 KG.", "Azucar marca Bella Vista x 1 Kg", 899, "https://statics.dinoonline.com.ar/imagenes/large_460x460/2000027_l.jpg", "2000027", 800);

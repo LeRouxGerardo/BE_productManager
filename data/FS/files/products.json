@@ -1,0 +1,93 @@
+[
+    {
+        "id": 1,
+        "title": "AZUCAR BELLA VISTA X 1 KG.",
+        "description": "Azucar marca Bella Vista x 1 Kg",
+        "price": 799,
+        "thumbnail": "https://statics.dinoonline.com.ar/imagenes/large_460x460/2000027_l.jpg",
+        "code": "2000027",
+        "stock": 800
+    },
+    {
+        "id": 2,
+        "title": "YERBA VERDEFLOR COMPUESTA X 1 KG.",
+        "description": "Yerba marca Verdeflor tipo Compuesta x 1 KG.",
+        "price": 2299,
+        "thumbnail": "https://statics.dinoonline.com.ar/imagenes/large_460x460/2010294_l.jpg",
+        "code": "2010294",
+        "stock": 1200
+    },
+    {
+        "id": 3,
+        "title": "AGUA SABORIZADA LIVRA NARANJA BOTELLA X 1.500 CC.",
+        "description": "Agua saborizada marca Livra sabor naranja en botella de 1.5 cc",
+        "price": 935,
+        "thumbnail": "https://statics.dinoonline.com.ar/imagenes/large_460x460/3040735_l.jpg",
+        "code": "3040735",
+        "stock": 600
+    },
+    {
+        "id": 4,
+        "title": "FIDEOS LUCCHETTI SPAGHETTI X 500 GR.",
+        "description": "Fideos SPAGHETTI marca LUCCHETTI X 500 GR.",
+        "price": 849,
+        "thumbnail": "https://statics.dinoonline.com.ar/imagenes/full_600x600_ma/2540676_f.jpg",
+        "code": "2540676",
+        "stock": 1200
+    },
+    {
+        "id": 5,
+        "title": "POSTRE EXQUISITA VAINILLA LIGHT X 50 GR.",
+        "description": "POSTRE de VAINILLA LIGHT marca EXQUISITA X 50 GR.",
+        "price": 849,
+        "thumbnail": "https://statics.dinoonline.com.ar/imagenes/full_600x600_ma/2160878_f.jpg",
+        "code": "2160878",
+        "stock": 500
+    },
+    {
+        "id": 6,
+        "title": "HAMBURGUESAS DE CARNE SWIFT CLASICA DOBLE PLUS X 2 UN. X 16O GR.",
+        "description": "HAMBURGUESAS DE CARNE marca SWIFT CLASICA DOBLE PLUS X 2 UN. X 16O GR.",
+        "price": 1699,
+        "thumbnail": "https://statics.dinoonline.com.ar/imagenes/full_600x600_ma/3361332_f.jpg",
+        "code": "3361332",
+        "stock": 120
+    },
+    {
+        "id": 7,
+        "title": "FIDEOS DON VICENTE TALLARIN X 500 GR.",
+        "description": "FIDEOS marca DON VICENTE TALLARIN X 500 GR.",
+        "price": 1649,
+        "thumbnail": "https://statics.dinoonline.com.ar/imagenes/large_460x460/2540639_l.jpg",
+        "code": "2540639",
+        "stock": 200
+    },
+    {
+        "id": 8,
+        "title": "MATE RAO AUTOCEBANTE CON BOMBILLA DE METAL - ART. 980",
+        "description": "MATE marca RAO AUTOCEBANTE CON BOMBILLA DE METAL",
+        "price": 4290,
+        "thumbnail": "https://statics.dinoonline.com.ar/imagenes/full_600x600_ma/3638997_f.jpg",
+        "code": "3638997",
+        "stock": 60
+    },
+    {
+        "id": 9,
+        "title": "ACONDICIONADOR ELVIVE RT EXTREME X 200ML",
+        "description": "ACONDICIONADOR marca ELVIVE RT EXTREME X 200ML",
+        "price": 2790,
+        "thumbnail": "https://statics.dinoonline.com.ar/imagenes/full_600x600_ma/2916419_f.jpg",
+        "code": "2916419",
+        "stock": 300
+    },
+    {
+        "id": 10,
+        "title": "AZUCAR LEDESMA X 1 KG.",
+        "description": "AZUCAR marca LEDESMA X 1 KG.",
+        "price": 999,
+        "thumbnail": "https://statics.dinoonline.com.ar/imagenes/full_600x600_ma/2000060_f.jpg",
+        "code": "2000060",
+        "stock": 6000
+    }
+
+]

@@ -1,0 +1,30 @@
+{
+  "name": "3ra-entrega",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "start": "node ./app.js",
+    "dev": "nodemon ./app.js",
+    "test": "nodemon ./app.js"
+    
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LeRouxGerardo/BE_segundaEntrega.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LeRouxGerardo/BE_segundaEntrega/issues"
+  },
+  "homepage": "https://github.com/LeRouxGerardo/BE_segundaEntrega#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
