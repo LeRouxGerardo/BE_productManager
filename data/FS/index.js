@@ -46,8 +46,8 @@ const getProducts = async () => {
 };
 
 const getProductById = async (id) => {
-    await getProducts();
-    const product = products.find( product => product.id === id);
+    const products = await getProducts();
+    const product = products.find( product => product.id == id);
     if(!product) {
         console.log(`No se encontró el producto con el id ${id}`);
         return;

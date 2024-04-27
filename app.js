@@ -54,7 +54,7 @@ function index(req, res) {
       const one = await getProductById(nid);
 
       if (one) {
-        return res.json({ status: 200, response: nid });
+        return res.json({ status: 200, response: one });
       }  else {
         const error = new Error("Not found");
         error.status = 404;
