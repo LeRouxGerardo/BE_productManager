@@ -14,8 +14,8 @@ const addProduct = async (title, description, price, thumbnail, code, stock) => 
     price,
     thumbnail,
     code,
-    stock
-
+    stock,
+    status: true
    }
 
    console.log(Object.values(newProduct));
@@ -76,7 +76,12 @@ const deleteProduct = async (id) => {
 }
 
 
-export { getProducts, getProductById, updateProduct, deleteProduct };
+export default { 
+    getProducts, 
+    getProductById, 
+    updateProduct, 
+    deleteProduct,
+    addProduct };
 
 /*  //Test
 addProduct("AZUCAR BELLA VISTA X 1 KG.", "Azucar marca Bella Vista x 1 Kg", 899, "https://statics.dinoonline.com.ar/imagenes/large_460x460/2000027_l.jpg", "2000027", 800);
