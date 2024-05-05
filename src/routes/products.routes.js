@@ -1,11 +1,14 @@
-import { Router } from "express";
-import productManager from "../../data/FS/productManager.js"; 
+import { Router, response } from "express";
+import productManager from "../managers/productManager.js"; 
 
 const router = Router();
 
 router.get ("/", index);
-router.get("/", read);
-router.get("/:nid", readOne);
+router.post("/products", create);
+router.get("/products", read);
+router.get("/:pid", readOne);
+router.delete("/:pid", destroy);
+router.put("/:pid", update);
 
 
 
@@ -40,8 +43,8 @@ async function read(req, res) {
   
   async function readOne(req, res) {
     try {
-      const { nid } = req.params;
-      const one = await productManager.getProductById(nid);
+      const { pid } = req.params;
+      const one = await productManager.getProductById(pid);
 
       if (one) {
         return res.json({ status: 200, response: one });
@@ -60,51 +63,77 @@ async function read(req, res) {
   }
 
 
-router.post("/",async (req, res) => {
+async function create(req, res) {
 
   try {
     const product = req.body;
 
     const newProduct = await productManager.addProduct(product);
-
-    res.status(201).json(newProduct);
-  } catch(error) {
-    console.log(error);
+    return res.json({ status: 201, response: newProduct});
+    /* res.status(201).json(newProduct); */
+  } catch (error) {
+      console.log(error);
+      return res.json({
+        status: error.status || 500,
+        response: error.message || "ERROR",
+      });
   }
 
 
-})
+}
 
-router.put("/:pid",async (req, res) => {
+async function update(req, res) {
+
+  try {
+    const {pid} = req.params
+    const data = req.body
+    const updatedProduct = await productManager.updateProduct(pid, data);
+    if (updatedProduct) {
+    return res.json({ status: 200, response: updatedProduct});
+  }
+  const error = new Error( "Producto No encontrado!");
+  error.status = 404;
+  throw error;
+  } catch (error) {
+      console.log(error);
+      return res.json({
+        status: error.status || 500,
+        response: error.message || "ERROR",
+      });
+  }
+
+
+}
+
+
+async function destroy(req, res) {
 
   try {
     const{pid} = req.params;
-    const product = req.body;
 
-    const updateProduct = await productManager.updateProduct(pid, product);
+    const productToDelete = await productManager.getProductById(pid);
 
-    res.status(201).json(updateProduct);
-  } catch(error) {
+
+    if (productToDelete) {
+
+      await productManager.deleteProduct(pid)
+
+      return res.json({ status: 200, response : productToDelete})
+    }
+      const error = new Error( "Producto No encontrado!");
+      error.status = 404;
+      throw error;
+
+  } catch (error) {
     console.log(error);
-  }
+    return res.json({
+      status: error.status || 500,
+      response: error.message || "ERROR",
+    });
+}
 
 
-})
-
-router.delete("/:pid",async (req, res) => {
-
-  try {
-    const{pid} = req.params;
-  
-    await productManager.deleteProduct(pid);
-
-    res.status(201).json({message: "Producto eliminado"});
-  } catch(error) {
-    console.log(error);
-  }
-
-
-})
+}
 export default router;
 
 
