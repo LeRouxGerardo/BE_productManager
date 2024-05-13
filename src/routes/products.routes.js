@@ -45,7 +45,7 @@ async function read(req, res) {
     try {
       const { pid } = req.params;
       const product = await productManager.getProductById(+pid);
-
+      
       if (product) {
         return res.json({ status: 200, response: product });
       }  else {
@@ -87,7 +87,8 @@ async function update(req, res) {
   try {
     const {pid} = req.params
     const data = req.body
-    const updatedProduct = await productManager.updateProduct(pid, data);
+    const updatedProduct = await productManager.updateProduct(+pid, data);
+   
     if (updatedProduct) {
     return res.json({ status: 201, response: updatedProduct});
   }
@@ -111,12 +112,12 @@ async function destroy(req, res) {
   try {
     const{pid} = req.params;
 
-    const productToDelete = await productManager.getProductById(pid);
+    const productToDelete = await productManager.getProductById(+pid);
 
 
     if (productToDelete) {
 
-      await productManager.deleteProduct(pid)
+      await productManager.deleteProduct(+pid)
 
       return res.json({ status: 200, response : productToDelete})
     }
