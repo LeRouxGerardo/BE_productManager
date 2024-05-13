@@ -3,16 +3,16 @@ import productManager from "../managers/productManager.js";
 
 const router = Router();
 
-router.get ("/", index);
-router.post("/products", create);
-router.get("/products", read);
+/* router.get ("/", index); */
+router.post("/", create);
+router.get("/", read);
 router.get("/:pid", readOne);
 router.delete("/:pid", destroy);
 router.put("/:pid", update);
 
 
 
-function index(req, res) {
+/* function index(req, res) {
   try {
     const message = "Bienvenido al Sistema de Control de Stock";
     return res.json({ status: 200, response: message });
@@ -20,18 +20,18 @@ function index(req, res) {
     console.log(error);
     return res.json({ status: 500, response: error.message });
   } 
-}
+} */
 
 async function read(req, res) {
     try {
-      let limit = req.query.limit;
-      let all = await productManager.getProducts();
+      const {limit} = req.query;
+      const products = await productManager.getProducts(limit);
   
       if (limit && !isNaN(limit)) {
-        all = all.slice(0, parseInt(limit));
+        products = products.slice(0, parseInt(limit));
       }
   
-      return res.json({ status: 200, response: all });
+      return res.json({ status: 200, response: products });
     } catch (error) {
       console.log(error);
       return res.json({
@@ -44,10 +44,10 @@ async function read(req, res) {
   async function readOne(req, res) {
     try {
       const { pid } = req.params;
-      const one = await productManager.getProductById(pid);
+      const product = await productManager.getProductById(+pid);
 
-      if (one) {
-        return res.json({ status: 200, response: one });
+      if (product) {
+        return res.json({ status: 200, response: product });
       }  else {
         const error = new Error("Not found");
         error.status = 404;
@@ -70,7 +70,7 @@ async function create(req, res) {
 
     const newProduct = await productManager.addProduct(product);
     return res.json({ status: 201, response: newProduct});
-    /* res.status(201).json(newProduct); */
+   
   } catch (error) {
       console.log(error);
       return res.json({
@@ -89,7 +89,7 @@ async function update(req, res) {
     const data = req.body
     const updatedProduct = await productManager.updateProduct(pid, data);
     if (updatedProduct) {
-    return res.json({ status: 200, response: updatedProduct});
+    return res.json({ status: 201, response: updatedProduct});
   }
   const error = new Error( "Producto No encontrado!");
   error.status = 404;

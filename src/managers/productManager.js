@@ -5,8 +5,9 @@ import fs from "fs";
 let products = [];
 let pathFile = "./src/data/FS/files/products.json";
 
-const addProduct = async (title, description, price, thumbnail, code, stock) => {
-
+const addProduct = async (product) => {
+    const { title, description, price, thumbnail, code, stock } = product;
+    await getProducts();
    const newProduct = {
     id: products.length +1,
     title,
@@ -35,17 +36,21 @@ const addProduct = async (title, description, price, thumbnail, code, stock) => 
   await fs.promises.writeFile(pathFile, JSON.stringify(products));
 }
 
-const getProducts = async () => {
+const getProducts = async (limit) => {
     
     
     const productsJson = await fs.promises.readFile(pathFile, "utf8");
 
     products = JSON.parse(productsJson) || [];
 
-    return products;
+    if (!limit) return products;
+
+    return products.slice(0, limit);
 };
 
 const getProductById = async (id) => {
+
+    
     const products = await getProducts();
     const product = products.find( product => product.id == id);
     if(!product) {
