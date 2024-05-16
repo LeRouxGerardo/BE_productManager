@@ -63,21 +63,30 @@ const getProductById = async (id) => {
 
 const updateProduct = async (id, dataProduct) => {
     await getProducts();
-    const index = products.findIndex( product => product.id === id);
+    const index = products.findIndex( (product) => product.id === id);
     products[index] = {
         ...products[index],
         ...dataProduct
-    }
-
+    };
+try{
     await fs.promises.writeFile(pathFile, JSON.stringify(products));
-
+    return true;
+} catch (error) {
+    return false;
+}
 
 };
 
 const deleteProduct = async (id) => {
     await getProducts();
     products = products.filter( product => product.id !== id);
-    await fs.promises.writeFile(pathFile, JSON.stringify(products));
+
+    try{
+        await fs.promises.writeFile(pathFile, JSON.stringify(products));
+        return true;
+    } catch (error) {
+        return false;
+    }
 }
 
 

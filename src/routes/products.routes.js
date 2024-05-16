@@ -67,9 +67,9 @@ async function create(req, res) {
 
   try {
     const product = req.body;
-
     const newProduct = await productManager.addProduct(product);
-    return res.json({ status: 201, response: newProduct});
+
+    return res.status(newProduct.status).json(newProduct.response);
    
   } catch (error) {
       console.log(error);
@@ -88,7 +88,7 @@ async function update(req, res) {
     const {pid} = req.params
     const data = req.body
     const updatedProduct = await productManager.updateProduct(+pid, data);
-   
+    
     if (updatedProduct) {
     return res.json({ status: 201, response: updatedProduct});
   }
