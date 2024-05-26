@@ -1,9 +1,9 @@
 import { Router, response } from "express";
-import productManager from "../dao/fsManagers/productManager.js"; 
+import productDao from "../dao/mongoDao/product.dao.js";
 
 const router = Router();
 
-/* router.get ("/", index); */
+
 router.post("/", create);
 router.get("/", read);
 router.get("/:pid", readOne);
@@ -12,26 +12,18 @@ router.put("/:pid", update);
 
 
 
-/* function index(req, res) {
-  try {
-    const message = "Bienvenido al Sistema de Control de Stock";
-    return res.json({ status: 200, response: message });
-  } catch (error) {
-    console.log(error);
-    return res.json({ status: 500, response: error.message });
-  } 
-} */
+
 
 async function read(req, res) {
     try {
-      const {limit} = req.query;
-      const products = await productManager.getProducts(limit);
+      /* const {limit} = req.query; */
+      const products = await productDao.getAll();
   
       if (limit && !isNaN(limit)) {
         products = products.slice(0, parseInt(limit));
       }
   
-      return res.json({ status: 200, response: products });
+      return res.json({ status: "success", payload: products });
     } catch (error) {
       console.log(error);
       return res.json({
