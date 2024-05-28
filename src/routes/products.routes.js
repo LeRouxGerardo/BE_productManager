@@ -19,11 +19,11 @@ async function read(req, res) {
       /* const {limit} = req.query; */
       const products = await productDao.getAll();
   
-      if (limit && !isNaN(limit)) {
-        products = products.slice(0, parseInt(limit));
-      }
+      // if (limit && !isNaN(limit)) {
+     //   products = products.slice(0, parseInt(limit));
+     // } 
   
-      return res.json({ status: "success", payload: products });
+      return res.status(200).json({ status: "success", payload: products });
     } catch (error) {
       console.log(error);
       return res.json({
@@ -32,14 +32,14 @@ async function read(req, res) {
       });
     }
   }
-  
+
   async function readOne(req, res) {
     try {
       const { pid } = req.params;
-      const product = await productManager.getProductById(+pid);
+      const product = await productDao.getById(+pid);
       
       if (product) {
-        return res.json({ status: 200, response: product });
+        return res.status(200).json({ status: "success", payload: product });
       }  else {
         const error = new Error("Not found");
         error.status = 404;
@@ -59,9 +59,9 @@ async function create(req, res) {
 
   try {
     const product = req.body;
-    const newProduct = await productManager.addProduct(product);
+    const newProduct = await productDao.create(product);
 
-    return res.status(newProduct.status).json(newProduct.response);
+    return res.status(200).json({ status: "success", payload: product });
    
   } catch (error) {
       console.log(error);
