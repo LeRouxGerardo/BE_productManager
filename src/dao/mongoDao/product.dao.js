@@ -19,6 +19,7 @@ const update = async (id, data) => {
 }
 const deleteOne = async (id) => {
     const product = await productModel.deleteOne({_id: id});
+    if(product.deletedCount === 0) return false;
     return true;
 }
 

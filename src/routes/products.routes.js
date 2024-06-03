@@ -36,13 +36,12 @@ async function read(req, res) {
   async function readOne(req, res) {
     try {
       const { pid } = req.params;
-      const product = await productDao.getById(+pid);
+      const product = await productDao.getById(pid);
       
       if (product) {
         return res.status(200).json({ status: "success", payload: product });
       }  else {
-        const error = new Error("Not found");
-        error.status = 404;
+        const error = res.status(404).json({status: "Error", msg: `Producto con el id ${pid} no encontrado`})
         throw error;
       }
     } catch (error) {
@@ -78,15 +77,15 @@ async function update(req, res) {
 
   try {
     const {pid} = req.params
-    const data = req.body
-    const updatedProduct = await productManager.updateProduct(+pid, data);
+    const productData = req.body
+    const updatedProduct = await productDao.update(pid, productData);
     
     if (updatedProduct) {
-    return res.json({ status: 201, response: updatedProduct});
-  }
-  const error = new Error( "Producto No encontrado!");
-  error.status = 404;
+    return res.status(200).json({ status: "success", payload: updatedProduct });
+  } else {
+    const error = res.status(404).json({status: "Error", msg: `Producto con el id ${pid} no encontrado`})
   throw error;
+  }
   } catch (error) {
       console.log(error);
       return res.json({
@@ -102,21 +101,13 @@ async function update(req, res) {
 async function destroy(req, res) {
 
   try {
-    const{pid} = req.params;
+    const { pid } = req.params;
 
-    const productToDelete = await productManager.getProductById(+pid);
-
-
-    if (productToDelete) {
-
-      await productManager.deleteProduct(+pid)
-
-      return res.json({ status: 200, response : productToDelete})
-    }
-      const error = new Error( "Producto No encontrado!");
-      error.status = 404;
-      throw error;
-
+    const product = await productDao.deleteOne(pid);  
+    if (!product) return res.status(404).json({status: "Error", msg: `Producto con el id ${pid} no encontrado`})
+    
+      res.status(200).json({message:"Producto Eliminado"});
+    
   } catch (error) {
     console.log(error);
     return res.json({
