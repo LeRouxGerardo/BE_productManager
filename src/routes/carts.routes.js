@@ -13,7 +13,7 @@ router.post("/", async (req,res) => {
     }
 });
 
-router.post("/cid/product/:pid", async (req,res) => {
+router.post("/:cid/product/:pid", async (req,res) => {
     try{
         const { cid, pid} = req.params;
         const cart = await cartDao.addProductToCart(cid, pid);
