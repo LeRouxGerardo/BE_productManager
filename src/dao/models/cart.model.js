@@ -4,9 +4,13 @@ const cartCollection = "carts";
 
 const cartSchema = new mongoose.Schema({
     products: {
-        type: Array,
-        default: [],
-    }
+        type: [ { product: { type: mongoose.Schema.Types.ObjectId, ref: "products" }, quantity: Number }],
+    },
+
+});
+
+cartSchema.pre("find", function (){
+    this.populate("products.product");
 
 });
 
