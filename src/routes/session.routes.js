@@ -1,21 +1,19 @@
 import { Router } from "express";
 import userDao from "../dao/mongoDao/user.dao.js"
-
+import { createHash, isValidPassword } from "../utils/hashpassword.js";
+import passport from "passport";
 const router = Router();
 
-router.post("/register", async (req, res) =>{
+router.post("/register", passport.authenticate("register"), async (req, res) =>{
 
     try {
-        const userData = req.body;
-        const newUser = await userDao.create(userData)
-if(!newUser) return res.status(400).json({status: "Error", msg: "No se pudo crear el usuario"});
 
-        res.status(201).json({status: "success", payload: newUser});
+        res.status(201).json({status: "success", msg: "Usuario Creado"});
     } catch (error) {
         console.log(error);
             res.status(500).json({status: "Error", msg: "Internal Server Error"});
     }
-})
+});
 
 router.post("/login", async (req, res) =>{
 
@@ -32,7 +30,7 @@ router.post("/login", async (req, res) =>{
         }
 
         const user = await userDao.getByEmail(email);
-        if(!user || user.password !== password ) {
+        if(!user || !isValidPassword(user, password)) {
             return res.status(401).json({status: "Error", msg: "Email o password no válidos"});
         }
 
