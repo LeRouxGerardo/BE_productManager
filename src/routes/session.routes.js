@@ -1,7 +1,10 @@
 import { Router } from "express";
-import userDao from "../dao/mongoDao/user.dao.js"
+import userDao from "../dao/mongoDao/user.dao.js";
 import { createHash, isValidPassword } from "../utils/hashpassword.js";
 import passport from "passport";
+import { createToken, verifyToken } from "../utils/jwt.js";
+
+
 const router = Router();
 
 router.post("/register", passport.authenticate("register"), async (req, res) =>{
@@ -15,38 +18,75 @@ router.post("/register", passport.authenticate("register"), async (req, res) =>{
     }
 });
 
-router.post("/login", async (req, res) =>{
+router.post("/login", passport.authenticate("login"), async (req, res) =>{
 
     try {
 
         const { email, password } = req.body;
 
-        if(email === "adminCoder@coder.com" && password === "adminCod3r123" ){
-            req.session.user = {
-                email,
-                role: "admin"
+            return res.status(200).json({status: "success", payload: req.user });
+        
+            } catch (error) {
+                console.log(error);
+                    res.status(500).json({status: "Error", msg: "Internal Server Error"});
+            
             }
-            return res.status(200).json({status: "success", payload: req.session.user });
-        }
+})
+
+router.post("/jwt", async (req, res) =>{
+
+    try {
+
+        const { email, password } = req.body;
 
         const user = await userDao.getByEmail(email);
-        if(!user || !isValidPassword(user, password)) {
-            return res.status(401).json({status: "Error", msg: "Email o password no válidos"});
-        }
+        if(!user || !isValidPassword(user, password)) return res.status(401).json({ status: "error", msg: "usuario o contraseña no válido"})
+            
+        const token = createToken(user);
 
-        req.session.user = {
-            email,
-            role: "user"
-        }
+        res.cookie("token", token, { httpOnly: true})
+    
+        return res.status(200).json({status: "success", payload: user, token });
+        
+            } catch (error) {
+                console.log(error);
+                    res.status(500).json({status: "Error", msg: "Internal Server Error"});
+            
+            }
+})
 
+router.get("/current", (req, res) => {
+    try {
+        const token = req.cookies.token;
+        const checkToken = verifyToken(token);
+        if(!checkToken) return res.status(403).json({status:"error", msg: "Invalid token"});
 
-        res.status(200).json({status: "success", payload: req.session.user });
+        return res.status(200).json({status: "success", payload: checkToken });
 
     } catch (error) {
         console.log(error);
             res.status(500).json({status: "Error", msg: "Internal Server Error"});
-    
     }
+});
+
+
+router.get("/google", passport.authenticate("google", {
+    scope: ["https://www.googleapis.com/auth/userinfo.email","https://www.googleapis.com/auth/userinfo.profile"],
+    session: false
+}
+), async (req, res) =>{
+
+    try {
+
+        const { email, password } = req.body;
+
+            return res.status(200).json({status: "success", payload: req.user });
+        
+            } catch (error) {
+                console.log(error);
+                    res.status(500).json({status: "Error", msg: "Internal Server Error"});
+            
+            }
 })
 
 router.get("/logout", async (req, res) =>{

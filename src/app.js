@@ -6,7 +6,7 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
-
+import cookieParser from "cookie-parser";
 connectMongoDB();
 
 
@@ -17,6 +17,7 @@ const ready = console.log("server ready on port " + port);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser("secret"));
 app.use(session({
     store: MongoStore.create({
         mongoUrl: "mongodb+srv://lerouxgerardo:admin123456@cluster0.xee7vf4.mongodb.net/ecommerce",
@@ -27,8 +28,8 @@ app.use(session({
     saveUninitialized: true,
 }))
 
-app.use(passport.initialize())
-app.use(passport.session())
+app.use(passport.initialize());
+app.use(passport.session());
 initializePassport();
 
 app.use("/api",router);
