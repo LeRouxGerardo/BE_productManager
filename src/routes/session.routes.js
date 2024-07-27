@@ -21,9 +21,6 @@ router.post("/register", passport.authenticate("register"), async (req, res) =>{
 router.post("/login", passport.authenticate("login"), async (req, res) =>{
 
     try {
-
-        const { email, password } = req.body;
-
             return res.status(200).json({status: "success", payload: req.user });
         
             } catch (error) {
@@ -31,7 +28,7 @@ router.post("/login", passport.authenticate("login"), async (req, res) =>{
                     res.status(500).json({status: "Error", msg: "Internal Server Error"});
             
             }
-})
+});
 
 router.post("/jwt", async (req, res) =>{
 
@@ -55,13 +52,10 @@ router.post("/jwt", async (req, res) =>{
             }
 })
 
-router.get("/current", (req, res) => {
-    try {
-        const token = req.cookies.token;
-        const checkToken = verifyToken(token);
-        if(!checkToken) return res.status(403).json({status:"error", msg: "Invalid token"});
+router.get("/current", passport.authenticate("jwt", {session: false}), (req, res) => {
+    try {       
 
-        return res.status(200).json({status: "success", payload: checkToken });
+        return res.status(200).json({status: "success", payload: req.user });
 
     } catch (error) {
         console.log(error);
