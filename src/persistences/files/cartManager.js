@@ -1,9 +1,7 @@
-
-import { json } from "express";
 import fs from "fs";
 
 let carts = [];
-const pathFile = "/data/carts.json"
+const pathFile = "./src/data/carts.json"
 
 const getCarts = async () => {
 const cartsJson = await fs.promises.readFile(pathFile);

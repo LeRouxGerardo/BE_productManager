@@ -1,7 +1,7 @@
 import { userModel } from "../models/user.model.js";
 
 const getAll = async (query, options) => {
-    const users = await userModel.find();
+    const users = await userModel.paginate(query, options);
     return users;
 };
 const getById = async (id) => {
@@ -17,13 +17,12 @@ const create = async (data) => {
     return user;
 }
 const update = async (id, data) => {
-    await userModel.findByIdAndUpdate(id, data);
-    const user = await userModel.findById(id)
+    const user = await userModel.findByIdAndUpdate(id, data, { new: true });
     return user;
 }
 const deleteOne = async (id) => {
-    const user = await userModel.deleteOne({_id: id});
-    if(user.deletedCount === 0) return false;
+    const user = await userModel.deleteOne({ _id: id });
+    if (user.deletedCount === 0) return false;
     return true;
 }
 

@@ -3,7 +3,9 @@ import local from "passport-local";
 import google from "passport-google-oauth20";
 import jwt from "passport-jwt";
 import { createHash, isValidPassword } from "../utils/hashpassword.js";
-import userDao from "../dao/mongoDao/user.dao.js";
+import envs from "./env.config.js";
+import userRepository from "../persistences/mongo/repositories/user.repository.js";
+import cartsRepository from "../persistences/mongo/repositories/carts.repository.js";
 
 
 
@@ -12,10 +14,10 @@ const GoogleStrategy = google.Strategy;
 const JWTStrategy= jwt.Strategy;
 const ExtractJWT = jwt.ExtractJwt;
 
-const cookierExtracto = (req) => {
+const cookieExtracto = (req) => {
     let token = null;
-    if(req && req.cookie) {
-        token = req.cookie.token
+    if(req && req.cookies) {
+        token = req.cookies.token;
     }
     return token;
 }
@@ -26,55 +28,59 @@ const initializePassport = () => {
         "register",
         new LocalStrategy( 
             {passReqToCallback: true, usernameField: "email" },
-        async (req, username, password, done) => {
-            try {
-                const { first_name, last_name, email, age } = req.body;
-                const user = await userDao.getByEmail(username);
-                if(user) return done(null, false, { message: "El usuario ya existe"});
-
-                const newUser = {
-                    first_name,
-                    last_name,
-                    email,age,
-                    password: createHash(password)
-                }
-                const createUser = await userDao.create(newUser);
-                return done(null, createUser);
-
-            } catch (error) {
-                return done(error)                
-            }
-        }
-       ));
-
-         passport.use(
-         "login",
-         new LocalStrategy(
-            { usernameField: "email" },
-            async (username, password, done) => {
+            async (req, username, password, done) => {
+            
                 try {
+                    const { first_name, last_name, email, age } = req.body;
+
                     const user = await userDao.getByEmail(username);
-                    if(!user || !isValidPassword(user, password)) return done(null, false, { messege: "email o password inválidos"});
 
-                    return done(null, user);
+                    if(user) return done(null, false, { message: "El usuario ya existe"});
+
+                    const newUser = {
+                        first_name,
+                        last_name,
+                        email,age,
+                        password: createHash(password)
+                    }
+
+                    const createUser = await userDao.create(newUser);
+                    return done(null, createUser);
+
                 } catch (error) {
-                    console.log(error);
-                   done(error)             
-                }
-            })
+                    return done(error)                
+                  }
+            }
+       )
+    );
 
-         );
+    passport.use(
+    "login",
+    new LocalStrategy({ usernameField: "email" },
+    async (username, password, done) => {
+        try {
+            const user = await userRepository.getByEmail(username);
+            if(!user || !isValidPassword(user, password)) return done(null, false, { messege: "email o password inválidos"});
+
+            return done(null, user);
+        } catch (error) {
+            console.log(error);
+            done(error)             
+        }
+    })
+
+    );
 
          
-       passport.use(
-        "google",
+    passport.use(
+    "google",
         new GoogleStrategy(
             {
-                clientID: "",
-                clientSecret: "",
-                callbackURL: "",
+                clientID: envs.GOOGLE_CLIENT_ID,
+                clientSecret: envs.GOOGLE_CLIENT_SECRET,
+                callbackURL: "http://localhost:8080/api/session/google",
             },
-            async (accessTonken, refreshToken, profile, cb) => {
+            async (accessToken, refreshToken, profile, cb) => {
                 try {
                     
                     const { name, emails } = profile;
@@ -85,42 +91,43 @@ const initializePassport = () => {
                     };
 
                     const existUser = await userDao.getByEmail(emails[0].value);
-                    if(existUser) return cb(null, existUser)
+                    if(existUser) return cb(null, existUser);
 
                     const newUser = await userDao.create(user);
                     cb(null, newUser);
-                } catch (error) {
-                    return cb(error);
-                    
-                }
+                }   catch (error) {
+                        return cb(error);
+                        
+                    }
             }
         )
-       )
+    );
 
+    passport.use( 
+        "jwt", 
+            new JWTStrategy( {
+            jwtFromRequest: ExtractJWT.fromExtractors([cookieExtracto]),
+            secretOrKey: envs.CODE_SECRET,
+        },
+        async(jwt_payload, done) => {
+            try {
+                return done(null, jwt_payload);
+            } catch (error) {
+                return done(error);
+            }
+        }
+        )
+    );
 
+    passport.serializeUser( (user, done) => {
+        done(null, user._id)
+    })
 
-         passport.serializeUser( (user, done) => {
-            done(null, user._id)
-         })
-    
-         passport.deserializeUser(async (id, done) => {
-            const user = await userDao.getById(id);
-            done(null, user);
-         })
-};
-
-
-passport.use( "jwt", new JWTStrategy( {
-    jwtFromRequest: ExtractJWT.fromExtractors([cookierExtracto]),
-    secretOrKey: "codigoSecreto"
-},
-async(jwt_payload, done) => {
-    try {
-        return done(null, jwt_payload);
-    } catch (error) {
-        return done(error)
-    }
-}))
+    passport.deserializeUser(async (id, done) => {
+        const user = await userDao.getById(id);
+        done(null, user);
+    })
+    };
 
 
 export default initializePassport;

@@ -3,7 +3,7 @@ import fs from "fs";
 
 
 let products = [];
-let pathFile = "./src/data/FS/files/products.json";
+let pathFile = "./src/data/products.json";
 
 const addProduct = async (product) => {
     const { title, description, price, thumbnail, code, stock } = product;
@@ -19,7 +19,6 @@ const addProduct = async (product) => {
     status: true
    }
 
-   console.log(Object.values(newProduct));
    if (Object.values(newProduct).includes(undefined)) {
     console.log("Todos los campos son obligatorios");
     return;
@@ -51,7 +50,7 @@ const getProducts = async (limit) => {
 const getProductById = async (id) => {
 
     
-    const products = await getProducts();
+    await getProducts();
     const product = products.find( product => product.id == id);
     if(!product) {
         console.log(`No se encontró el producto con el id ${id}`);
@@ -66,28 +65,19 @@ const updateProduct = async (id, dataProduct) => {
     const index = products.findIndex( (product) => product.id === id);
     products[index] = {
         ...products[index],
-        ...dataProduct
+        ...dataProduct,
     };
-try{
-    await fs.promises.writeFile(pathFile, JSON.stringify(products));
-    return true;
-} catch (error) {
-    return false;
-}
 
+    await fs.promises.writeFile(pathFile, JSON.stringify(products));
 };
 
 const deleteProduct = async (id) => {
     await getProducts();
-    products = products.filter( product => product.id !== id);
+    products = products.filter( (product) => product.id !== id);
 
-    try{
-        await fs.promises.writeFile(pathFile, JSON.stringify(products));
-        return true;
-    } catch (error) {
-        return false;
-    }
-}
+    await fs.promises.writeFile(pathFile, JSON.stringify(products));
+       
+};
 
 
 export default { 

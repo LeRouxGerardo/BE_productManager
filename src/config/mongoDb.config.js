@@ -1,12 +1,13 @@
 import mongoose from "mongoose";
+import envs from "./env.config.js";
+import { logger } from "../utils/logger.js";
 
-const urlDb = "mongodb+srv://lerouxgerardo:admin123456@cluster0.xee7vf4.mongodb.net/ecommerce";
 
-export const connectMongoDB = async => {
+export const connectMongoDB = async () => {
     try {
-        mongoose.connect(urlDb);
-        console.log("Mongo DB Conectado");
+        await mongoose.connect(envs.MONGO_URL);
+        logger.info("Mongo DB Conectado");
         } catch (error) {
-            console.log(error);
-        }
+    logger.error(error);
+  }
 };
