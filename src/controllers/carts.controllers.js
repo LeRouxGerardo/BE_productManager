@@ -84,6 +84,7 @@ const deleteAllProductsInCart = async (req, res) => {
 
 const purchaseCart = async (req, res) => {
   try {
+
     const { cid } = req.params;
     const cart = await cartsServices.getCartById(cid);
     if (!cart) return res.status(404).json({ status: "Error", msg: `No se encontró el carrito con el id ${cid}` });
@@ -97,6 +98,9 @@ const purchaseCart = async (req, res) => {
     res.status(500).json({ status: "Error", msg: "Error interno del servidor" });
   }
 };
+
+
+
 
 export default {
   createCart,

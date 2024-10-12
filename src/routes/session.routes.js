@@ -21,12 +21,17 @@ router.post(
     sessionControllers.login
 );
 
-router.get("/current", passportCall("jwt"), authorization("user"), sessionControllers.current);
+router.get(
+  "/current", 
+  passportCall("jwt"), 
+  authorization("user"), 
+  sessionControllers.current);
 
 router.get(
   "/google",
   passport.authenticate("google", {
-    scope: ["https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile"],
+    scope: ["https://www.googleapis.com/auth/userinfo.email", 
+      "https://www.googleapis.com/auth/userinfo.profile"],
     session: false,
   }),
   sessionControllers.loginGoogle
@@ -55,12 +60,12 @@ router.get(
 
   const template = `
     <div>
-      <h1> Bienvenidos ${name} a RemerApp </h1>
+      <h1> Bienvenido ${name} a RemerApp </h1>
       <img src="cid:remera-logo" />
     </div>
     `;
 
-  await sendMail("lerouxgerardo@gmail.com", "Teste nodemailer", "Mail de prueba", template);
+  await sendMail("lerouxgerardo@gmail.com", "Promo Remerapp", "Estas son nuestras promos!", template);
 
   return res.status(200).json({ status: "ok", msg: "Email enviado" });
   

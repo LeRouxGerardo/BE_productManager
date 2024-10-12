@@ -9,8 +9,8 @@ export const errorHandle = (err, req, res, next) => {
     }
     res.status(status).json({
         error: {
-        message,
-        status,
+            message,
+            status,
         },
     });
 };

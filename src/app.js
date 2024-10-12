@@ -8,6 +8,7 @@ import initializePassport from "./config/passport.config.js";
 import cookieParser from "cookie-parser";
 import envs from "./config/env.config.js";
 import cors from "cors";
+import swaggerUiExpress from "swagger-ui-express";
 import { errorHandle } from "./errors/errorHandle.js";
 import { logger } from "./utils/logger.js";
 import dotenv from "dotenv";
@@ -36,6 +37,8 @@ app.use(passport.session());
 initializePassport();
 app.use(cors());
 
+app.use("/api-docs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
+
 app.use("/api",router);
 
 
@@ -43,12 +46,11 @@ app.listen(envs.PORT, () => {
     logger.log("info", `Escuchando el servidor en el puerto ${envs.PORT}`);
   });
 
-
-
+app.use(errorHandle);
   
 /* app.get("/operacionsencilla", (req, res) => {
     let sum = 0;
-    for (let i = 0; i < 100000; i++) {
+    for (let i = 0; i < 10000; i++) {
       sum += i;
     }
   
@@ -64,8 +66,6 @@ app.listen(envs.PORT, () => {
     res.send({ sum });
   });
   
-  app.use(errorHandle);
-  
-  
+    
    */
   

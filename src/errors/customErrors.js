@@ -1,11 +1,11 @@
-const notFoundError = (message = "Not found") => {
+const notFoundError = (message = "Not Found") => {
   const error = new Error(message);
   error.status = 404;
   return error;
 };
 
 
-const badRequestError = (message = "Bad request") => {
+const badRequestError = (message = "Bad Request") => {
   const error = new Error(message);
   error.status = 400;
   return error;
@@ -24,6 +24,7 @@ const forbiddenError = (message = "Forbidden") => {
   error.status = 403;
   return error;
 };
+
 
 
 export default {

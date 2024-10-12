@@ -31,20 +31,24 @@ const initializePassport = () => {
             async (req, username, password, done) => {
             
                 try {
-                    const { first_name, last_name, email, age } = req.body;
+                    const { first_name, last_name, email, age, role } = req.body;
 
-                    const user = await userDao.getByEmail(username);
+                    const user = await userRepository.getByEmail(username);
 
                     if(user) return done(null, false, { message: "El usuario ya existe"});
 
+                    const cart = await cartsRepository.create();
                     const newUser = {
                         first_name,
                         last_name,
-                        email,age,
-                        password: createHash(password)
-                    }
+                        email,
+                        age,
+                        password: createHash(password),
+                        role,
+                        cart: cart._id
+                    };
 
-                    const createUser = await userDao.create(newUser);
+                    const createUser = await userRepository.create(newUser);
                     return done(null, createUser);
 
                 } catch (error) {
@@ -64,7 +68,6 @@ const initializePassport = () => {
 
             return done(null, user);
         } catch (error) {
-            console.log(error);
             done(error)             
         }
     })
@@ -124,7 +127,7 @@ const initializePassport = () => {
     })
 
     passport.deserializeUser(async (id, done) => {
-        const user = await userDao.getById(id);
+        const user = await userRepository.getById(id);
         done(null, user);
     })
     };

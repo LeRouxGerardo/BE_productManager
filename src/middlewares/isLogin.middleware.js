@@ -7,4 +7,4 @@ export const isLogin = async (req = request, res = response, next) => {
         res.status(401).json({status: "Error", msg: "Usuario no logueado"});
     }
 
-}
+};

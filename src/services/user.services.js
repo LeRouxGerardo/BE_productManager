@@ -30,13 +30,35 @@ const resetPassword = async (email, password) => {
 
 
 const changeUserRole = async (uid) => {
+
     const user = await userRepository.getById(uid);
     if (!user) throw customErrors.notFoundError("User not found");
+
+    if (user.role === "user" && user.documents.length < 3) throw customErrors.badRequestError("You most all required documentation");
+
     const userRole = user.role === "premium" ? "user" : "premium";
 
     return await userRepository.update(uid, { role: userRole });
 };
 
+const addDocuments = async (uid, reqFiles) => {
+    const files = reqFiles.document;
+    const userDocuments = files.map((file) => {
+
+        return {
+            name: file.filename,
+            reference: file.path,
+        };
+    });
+
+    const user = await userRepository.update(uid, { documents: userDocuments });
+
+    return user;
+};
 
 
-export default { sendEmailResetPassword, resetPassword, changeUserRole };
+export default { 
+    sendEmailResetPassword, 
+    resetPassword, 
+    changeUserRole,
+    addDocuments };
